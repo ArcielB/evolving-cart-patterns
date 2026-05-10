@@ -3,6 +3,15 @@ classDiagram
         +create_product(sku, name, price, product_type) Product
     }
 
+    class ProductCreator {
+        <<interface>>
+        +create_product(sku, name, price) Product
+    }
+
+    class PhysicalProductCreator
+    class DigitalProductCreator
+    class SubscriptionProductCreator
+
     class Product {
         +str sku
         +str name
@@ -29,6 +38,10 @@ classDiagram
     }
 
     ShoppingCart --> ProductFactory
-    ProductFactory --> Product
+    ProductFactory --> ProductCreator
+    ProductCreator --> Product
+    ProductCreator <|.. PhysicalProductCreator
+    ProductCreator <|.. DigitalProductCreator
+    ProductCreator <|.. SubscriptionProductCreator
     ShoppingCart --> CartItem
     CartItem --> Product
