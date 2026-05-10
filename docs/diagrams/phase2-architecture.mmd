@@ -1,0 +1,30 @@
+classDiagram
+    class ProductFactory {
+        +create_product(...) Product
+    }
+
+    class ShoppingCart {
+        +add_item(Product, quantity)
+        +remove_item(sku, quantity)
+        +subtotal() Decimal
+        +item_count() int
+        +clear()
+    }
+
+    class CheckoutFacade {
+        +checkout(discount_code, payment_method, email) CheckoutResult
+        -_calculate_discount(discount_code, subtotal) Decimal
+    }
+
+    class PaymentAdapter {
+        +pay(amount, payment_method, email) PaymentReceipt
+    }
+
+    class ExternalPaymentProvider {
+        +submit_payment(payload) dict
+    }
+
+    CheckoutFacade --> ShoppingCart
+    CheckoutFacade --> PaymentAdapter
+    PaymentAdapter --> ExternalPaymentProvider
+    ShoppingCart --> ProductFactory

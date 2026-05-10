@@ -38,7 +38,7 @@ def test_checkout_applies_discount_and_selects_payment() -> None:
     assert result.discount == Decimal("10.00")
     assert result.total == Decimal("90.00")
     assert result.payment_status == "approved"
-    assert result.payment_reference.startswith("cc-student@example.com")
+    assert result.payment_reference.startswith("provider-credit_card-student@example.com")
     assert cart.items == {}
 
 
