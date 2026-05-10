@@ -10,7 +10,12 @@ I selected the e-commerce cart because it naturally becomes hard to maintain whe
 
 This repository is a design patterns homework project. It starts with an intentionally flawed cart implementation and then evolves through creational, structural, and behavioral design patterns.
 
-Phase 0 currently keeps too much responsibility inside `ShoppingCart` on purpose. Later branches refactor this baseline step by step.
+The project keeps each phase visible through branches and commits:
+
+1. Phase 0: intentionally flawed baseline.
+2. Phase 1: product creation moved to a Simple Factory.
+3. Phase 2: checkout orchestration and payment integration are improved with structural patterns.
+4. Phase 3: discounts and cart actions become extensible with behavioral patterns.
 
 ## Current Behavior
 
@@ -35,4 +40,13 @@ python3 -m pytest
 
 ## Diagrams
 
-The initial Phase 0 UML diagram is in `docs/diagrams/phase0-before.mmd`.
+- Phase 0 before refactoring: `docs/diagrams/phase0-before.mmd`
+- Phase 1 after Simple Factory: `docs/diagrams/phase1-after.mmd`
+
+```mermaid
+classDiagram
+    ShoppingCart --> ProductFactory
+    ProductFactory --> Product
+    ShoppingCart --> CartItem
+    CartItem --> Product
+```
