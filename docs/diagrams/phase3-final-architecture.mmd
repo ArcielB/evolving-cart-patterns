@@ -7,6 +7,19 @@ classDiagram
         +clear()
     }
 
+    class ProductFactory {
+        +create_product(...) Product
+    }
+
+    class ProductCreator {
+        <<interface>>
+        +create_product(...) Product
+    }
+
+    class PhysicalProductCreator
+    class DigitalProductCreator
+    class SubscriptionProductCreator
+
     class CheckoutFacade {
         +checkout(payment_method, email, DiscountStrategy) CheckoutResult
     }
@@ -39,6 +52,11 @@ classDiagram
         +submit_payment(payload) dict
     }
 
+    ShoppingCart --> ProductFactory
+    ProductFactory --> ProductCreator
+    ProductCreator <|.. PhysicalProductCreator
+    ProductCreator <|.. DigitalProductCreator
+    ProductCreator <|.. SubscriptionProductCreator
     CheckoutFacade --> ShoppingCart
     CheckoutFacade --> DiscountStrategy
     CheckoutFacade --> PaymentAdapter

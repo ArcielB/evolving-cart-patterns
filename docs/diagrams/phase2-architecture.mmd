@@ -3,6 +3,15 @@ classDiagram
         +create_product(...) Product
     }
 
+    class ProductCreator {
+        <<interface>>
+        +create_product(...) Product
+    }
+
+    class PhysicalProductCreator
+    class DigitalProductCreator
+    class SubscriptionProductCreator
+
     class ShoppingCart {
         +add_item(Product, quantity)
         +remove_item(sku, quantity)
@@ -28,3 +37,7 @@ classDiagram
     CheckoutFacade --> PaymentAdapter
     PaymentAdapter --> ExternalPaymentProvider
     ShoppingCart --> ProductFactory
+    ProductFactory --> ProductCreator
+    ProductCreator <|.. PhysicalProductCreator
+    ProductCreator <|.. DigitalProductCreator
+    ProductCreator <|.. SubscriptionProductCreator
