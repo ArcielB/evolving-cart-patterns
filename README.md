@@ -13,7 +13,7 @@ This repository is a design patterns homework project. It starts with an intenti
 The project keeps each phase visible through branches and commits:
 
 1. Phase 0: intentionally flawed baseline.
-2. Phase 1: product creation moved to a Simple Factory.
+2. Phase 1: product creation moved to Factory Method product creators.
 3. Phase 2: checkout orchestration and payment integration are improved with structural patterns.
 4. Phase 3: discounts and cart actions become extensible with behavioral patterns.
 
@@ -31,7 +31,7 @@ The project keeps each phase visible through branches and commits:
 
 | Phase | Pattern | Location | Short explanation |
 | --- | --- | --- | --- |
-| 1 | Simple Factory | `ProductFactory` | Centralizes product creation rules. |
+| 1 | Factory Method | `ProductCreator` classes | Concrete creators own product creation rules. |
 | 2 | Facade | `CheckoutFacade` | Provides one clean checkout entry point. |
 | 2 | Adapter | `PaymentAdapter` | Adapts provider-style payment calls to the app interface. |
 | 3 | Strategy | `DiscountStrategy` classes | Makes discount behavior interchangeable. |
@@ -42,6 +42,10 @@ The project keeps each phase visible through branches and commits:
 ```mermaid
 classDiagram
     ShoppingCart --> ProductFactory
+    ProductFactory --> ProductCreator
+    ProductCreator <|.. PhysicalProductCreator
+    ProductCreator <|.. DigitalProductCreator
+    ProductCreator <|.. SubscriptionProductCreator
     CheckoutFacade --> ShoppingCart
     CheckoutFacade --> DiscountStrategy
     CheckoutFacade --> PaymentAdapter
@@ -72,6 +76,6 @@ python3 -m pytest
 ## Diagrams
 
 - Phase 0 before refactoring: `docs/diagrams/phase0-before.mmd`
-- Phase 1 after Simple Factory: `docs/diagrams/phase1-after.mmd`
+- Phase 1 after Factory Method: `docs/diagrams/phase1-after.mmd`
 - Phase 2 structural architecture: `docs/diagrams/phase2-architecture.mmd`
 - Phase 3 final architecture: `docs/diagrams/phase3-final-architecture.mmd`

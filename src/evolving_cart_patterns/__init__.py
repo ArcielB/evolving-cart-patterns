@@ -8,7 +8,13 @@ from .discounts import (
     PercentageDiscount,
     ThresholdPercentageDiscount,
 )
-from .factories import ProductFactory
+from .factories import (
+    DigitalProductCreator,
+    PhysicalProductCreator,
+    ProductCreator,
+    ProductFactory,
+    SubscriptionProductCreator,
+)
 from .payments import ExternalPaymentProvider, PaymentAdapter, PaymentReceipt
 from .products import Product
 
@@ -18,6 +24,7 @@ __all__ = [
     "CartCommandHistory",
     "CheckoutFacade",
     "CheckoutResult",
+    "DigitalProductCreator",
     "ExternalPaymentProvider",
     "FixedAmountDiscount",
     "LoyaltyPointsDiscount",
@@ -25,9 +32,12 @@ __all__ = [
     "PaymentAdapter",
     "PaymentReceipt",
     "PercentageDiscount",
+    "PhysicalProductCreator",
     "Product",
+    "ProductCreator",
     "ProductFactory",
     "RemoveItemCommand",
     "ShoppingCart",
+    "SubscriptionProductCreator",
     "ThresholdPercentageDiscount",
 ]
