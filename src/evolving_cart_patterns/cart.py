@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
+from .discounts import DiscountStrategy
 from .factories import ProductFactory
 from .money import money
 from .products import Product
@@ -89,14 +90,14 @@ class ShoppingCart:
 
     def checkout(
         self,
-        discount_code: str | None,
         payment_method: str,
         customer_email: str,
+        discount_strategy: DiscountStrategy | None = None,
     ) -> CheckoutResult:
         from .checkout import CheckoutFacade
 
         return CheckoutFacade(self).checkout(
-            discount_code=discount_code,
             payment_method=payment_method,
             customer_email=customer_email,
+            discount_strategy=discount_strategy,
         )

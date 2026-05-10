@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from evolving_cart_patterns import CheckoutFacade, ShoppingCart
+from evolving_cart_patterns import CheckoutFacade, PercentageDiscount, ShoppingCart
 
 
 def test_checkout_facade_completes_checkout() -> None:
@@ -9,9 +9,9 @@ def test_checkout_facade_completes_checkout() -> None:
     facade = CheckoutFacade(cart)
 
     result = facade.checkout(
-        discount_code="VIP20",
         payment_method="credit_card",
         customer_email="student@example.com",
+        discount_strategy=PercentageDiscount("VIP20", Decimal("0.20")),
     )
 
     assert result.subtotal == Decimal("100.00")
