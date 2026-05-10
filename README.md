@@ -22,7 +22,38 @@ The project keeps each phase visible through branches and commits:
 - Add physical, digital, or subscription products to a cart.
 - Remove all or part of a product quantity.
 - Calculate cart subtotal.
-- Checkout with hard-coded discount and payment conditionals.
+- Checkout through a facade.
+- Apply interchangeable discount strategies.
+- Process payment through an adapter around an external-style provider.
+- Execute and undo cart actions through commands.
+
+## Patterns Used
+
+| Phase | Pattern | Location | Short explanation |
+| --- | --- | --- | --- |
+| 1 | Simple Factory | `ProductFactory` | Centralizes product creation rules. |
+| 2 | Facade | `CheckoutFacade` | Provides one clean checkout entry point. |
+| 2 | Adapter | `PaymentAdapter` | Adapts provider-style payment calls to the app interface. |
+| 3 | Strategy | `DiscountStrategy` classes | Makes discount behavior interchangeable. |
+| 3 | Command | `AddItemCommand`, `RemoveItemCommand` | Represents cart actions as executable and undoable objects. |
+
+## Architecture
+
+```mermaid
+classDiagram
+    ShoppingCart --> ProductFactory
+    CheckoutFacade --> ShoppingCart
+    CheckoutFacade --> DiscountStrategy
+    CheckoutFacade --> PaymentAdapter
+    PaymentAdapter --> ExternalPaymentProvider
+    DiscountStrategy <|.. PercentageDiscount
+    DiscountStrategy <|.. ThresholdPercentageDiscount
+    DiscountStrategy <|.. FixedAmountDiscount
+    DiscountStrategy <|.. LoyaltyPointsDiscount
+    CartCommand <|.. AddItemCommand
+    CartCommand <|.. RemoveItemCommand
+    CartCommandHistory --> CartCommand
+```
 
 ## Run
 
@@ -43,14 +74,4 @@ python3 -m pytest
 - Phase 0 before refactoring: `docs/diagrams/phase0-before.mmd`
 - Phase 1 after Simple Factory: `docs/diagrams/phase1-after.mmd`
 - Phase 2 structural architecture: `docs/diagrams/phase2-architecture.mmd`
-
-```mermaid
-classDiagram
-    ShoppingCart --> ProductFactory
-    ProductFactory --> Product
-    ShoppingCart --> CartItem
-    CartItem --> Product
-    CheckoutFacade --> ShoppingCart
-    CheckoutFacade --> PaymentAdapter
-    PaymentAdapter --> ExternalPaymentProvider
-```
+- Phase 3 final architecture: `docs/diagrams/phase3-final-architecture.mmd`

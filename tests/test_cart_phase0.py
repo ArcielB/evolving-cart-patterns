@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from evolving_cart_patterns import ShoppingCart
+from evolving_cart_patterns import PercentageDiscount, ShoppingCart
 
 
 def test_add_products_and_calculate_subtotal() -> None:
@@ -29,9 +29,9 @@ def test_checkout_applies_discount_and_selects_payment() -> None:
     cart.add_product("COURSE-1", "Monthly Course", "100.00", "subscription")
 
     result = cart.checkout(
-        discount_code="WELCOME10",
         payment_method="credit_card",
         customer_email="student@example.com",
+        discount_strategy=PercentageDiscount("WELCOME10", Decimal("0.10")),
     )
 
     assert result.subtotal == Decimal("100.00")
@@ -42,9 +42,9 @@ def test_checkout_applies_discount_and_selects_payment() -> None:
     assert cart.items == {}
 
 
-def test_unknown_discount_is_rejected() -> None:
+def test_unknown_payment_is_rejected() -> None:
     cart = ShoppingCart()
     cart.add_product("PDF-1", "Python Guide", "25.50", "digital")
 
-    with pytest.raises(ValueError, match="Unknown discount code"):
-        cart.checkout("BROKEN", "paypal", "student@example.com")
+    with pytest.raises(ValueError, match="Unknown payment method"):
+        cart.checkout("cash", "student@example.com")

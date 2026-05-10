@@ -1,0 +1,54 @@
+classDiagram
+    class ShoppingCart {
+        +add_item(Product, quantity)
+        +remove_item(sku, quantity)
+        +subtotal() Decimal
+        +item_count() int
+        +clear()
+    }
+
+    class CheckoutFacade {
+        +checkout(payment_method, email, DiscountStrategy) CheckoutResult
+    }
+
+    class DiscountStrategy {
+        <<interface>>
+        +calculate(subtotal) Decimal
+    }
+
+    class PercentageDiscount
+    class ThresholdPercentageDiscount
+    class FixedAmountDiscount
+    class LoyaltyPointsDiscount
+
+    class CartCommand {
+        <<interface>>
+        +execute()
+        +undo()
+    }
+
+    class AddItemCommand
+    class RemoveItemCommand
+    class CartCommandHistory
+
+    class PaymentAdapter {
+        +pay(amount, payment_method, email) PaymentReceipt
+    }
+
+    class ExternalPaymentProvider {
+        +submit_payment(payload) dict
+    }
+
+    CheckoutFacade --> ShoppingCart
+    CheckoutFacade --> DiscountStrategy
+    CheckoutFacade --> PaymentAdapter
+    PaymentAdapter --> ExternalPaymentProvider
+    DiscountStrategy <|.. PercentageDiscount
+    DiscountStrategy <|.. ThresholdPercentageDiscount
+    DiscountStrategy <|.. FixedAmountDiscount
+    DiscountStrategy <|.. LoyaltyPointsDiscount
+    CartCommand <|.. AddItemCommand
+    CartCommand <|.. RemoveItemCommand
+    CartCommandHistory --> CartCommand
+    AddItemCommand --> ShoppingCart
+    RemoveItemCommand --> ShoppingCart
