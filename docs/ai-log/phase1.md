@@ -12,19 +12,20 @@ The AI suggested using either Factory Method or Simple Factory. It explained tha
 
 ## Decision
 
-I implemented a Simple Factory named `ProductFactory`. The cart still has a convenient `add_product` method, but object creation is delegated to the factory.
+I implemented Factory Method with a `ProductCreator` interface and concrete creators for physical, digital, and subscription products. The cart still has a convenient `add_product` method, and `ProductFactory` remains as a small registry that chooses the correct creator.
 
 ## What I Accepted
 
 - Move product creation out of `ShoppingCart`.
-- Keep product creation rules in one named class.
+- Give each product type its own creator class.
 - Add tests that verify the factory creates known product types and rejects unknown ones.
 
 ## What I Rejected
 
 - I rejected Abstract Factory because this project does not create complete product families.
 - I rejected Singleton because a product factory does not need global shared state.
+- I rejected leaving the implementation as only a Simple Factory because the assignment names Factory Method as the clearer creational pattern example.
 
 ## Result
 
-The creation-related problem from `PROBLEMS.md` is reduced: adding or changing product construction rules is now isolated in `ProductFactory` instead of being mixed with cart behavior.
+The creation-related problem from `PROBLEMS.md` is reduced: adding or changing product construction rules is now isolated in product creator classes instead of being mixed with cart behavior.

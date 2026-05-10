@@ -13,7 +13,7 @@ This repository is a design patterns homework project. It starts with an intenti
 The project keeps each phase visible through branches and commits:
 
 1. Phase 0: intentionally flawed baseline.
-2. Phase 1: product creation moved to a Simple Factory.
+2. Phase 1: product creation moved to Factory Method product creators.
 3. Phase 2: checkout orchestration and payment integration are improved with structural patterns.
 4. Phase 3: discounts and cart actions become extensible with behavioral patterns.
 
@@ -41,12 +41,15 @@ python3 -m pytest
 ## Diagrams
 
 - Phase 0 before refactoring: `docs/diagrams/phase0-before.mmd`
-- Phase 1 after Simple Factory: `docs/diagrams/phase1-after.mmd`
+- Phase 1 after Factory Method: `docs/diagrams/phase1-after.mmd`
 
 ```mermaid
 classDiagram
     ShoppingCart --> ProductFactory
-    ProductFactory --> Product
+    ProductFactory --> ProductCreator
+    ProductCreator <|.. PhysicalProductCreator
+    ProductCreator <|.. DigitalProductCreator
+    ProductCreator <|.. SubscriptionProductCreator
     ShoppingCart --> CartItem
     CartItem --> Product
 ```
