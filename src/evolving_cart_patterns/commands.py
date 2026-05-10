@@ -18,12 +18,17 @@ class AddItemCommand:
     cart: ShoppingCart
     product: Product
     quantity: int = 1
+    previous_item: CartItem | None = None
 
     def execute(self) -> None:
+        self.previous_item = self.cart.items.get(self.product.sku)
         self.cart.add_item(self.product, self.quantity)
 
     def undo(self) -> None:
-        self.cart.remove_item(self.product.sku, self.quantity)
+        if self.previous_item is None:
+            self.cart.remove_item(self.product.sku, self.quantity)
+            return
+        self.cart.items[self.product.sku] = self.previous_item
 
 
 @dataclass
