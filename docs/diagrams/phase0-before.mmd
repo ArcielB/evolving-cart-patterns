@@ -1,0 +1,38 @@
+classDiagram
+    class Product {
+        +str sku
+        +str name
+        +Decimal price
+        +str product_type
+        +bool shipping_required
+        +Decimal tax_rate
+    }
+
+    class CartItem {
+        +Product product
+        +int quantity
+        +line_total Decimal
+    }
+
+    class CheckoutResult {
+        +Decimal subtotal
+        +Decimal discount
+        +Decimal total
+        +str payment_status
+        +str payment_reference
+        +int item_count
+    }
+
+    class ShoppingCart {
+        +dict items
+        +create_product(type) Product
+        +add_product(...)
+        +add_item(Product, quantity)
+        +remove_item(sku, quantity)
+        +subtotal() Decimal
+        +checkout(discount_code, payment_method, email) CheckoutResult
+    }
+
+    ShoppingCart --> CartItem
+    CartItem --> Product
+    ShoppingCart --> CheckoutResult
