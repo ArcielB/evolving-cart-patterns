@@ -41,3 +41,27 @@ No design pattern has been applied yet. The baseline intentionally keeps product
 **Benefit:** The rest of the application can use a stable payment interface even if the external provider changes its payload format.
 
 **Rejected alternatives:** Proxy was not needed because there is no remote access control or caching concern. Decorator was not needed because payment behavior is not being layered with optional responsibilities.
+
+## Phase 3 - Strategy
+
+**Where:** `src/evolving_cart_patterns/discounts.py` and `src/evolving_cart_patterns/checkout.py`
+
+**Problem solved:** Discount rules were previously selected through conditional logic. A new discount required editing checkout code.
+
+**Implementation:** `CheckoutFacade.checkout(...)` accepts a `DiscountStrategy`. Concrete strategies calculate discounts independently: percentage, threshold percentage, fixed amount, loyalty points, or any new class with the same `calculate(...)` method.
+
+**Benefit:** Checkout is open for extension and closed for modification. The OCP test adds a `StudentDiscount` class in the test without editing `ShoppingCart` or `CheckoutFacade`.
+
+**Rejected alternatives:** A discount-code dictionary was rejected because adding a new code would still require changing central selection logic.
+
+## Phase 3 - Command
+
+**Where:** `src/evolving_cart_patterns/commands.py`
+
+**Problem solved:** Cart actions were direct mutations, so there was no object representing an operation. That made undo or action history difficult.
+
+**Implementation:** `AddItemCommand` and `RemoveItemCommand` implement `execute()` and `undo()`. `CartCommandHistory` executes commands and can undo the most recent one.
+
+**Benefit:** Cart actions can be logged, queued, tested, and undone without adding those responsibilities to `ShoppingCart`.
+
+**Rejected alternatives:** Memento was rejected because the project does not need full cart snapshots. Command is smaller and matches the action-based requirement.
