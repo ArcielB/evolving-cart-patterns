@@ -37,10 +37,12 @@ The AI first suggested keeping a dictionary of discount codes inside checkout. I
 
 The AI also suggested making commands responsible for creating products. I rejected that because product creation already belongs to `ProductFactory`; commands should represent actions against the cart.
 
+During final review, I found one missed Command detail: undoing an add operation should restore the previous cart item exactly when the SKU already existed, not only subtract the added quantity. I updated `AddItemCommand` to snapshot the previous `CartItem` before execution and added a regression test for that case.
+
 ## AI Without This Phase
 
 Without AI, this phase would likely take about 60-90 minutes because I would spend more time comparing Strategy and Command boundaries. AI was most useful for quickly listing the design options. It was least useful when it suggested a discount-code dictionary, because that would weaken the Open/Closed Principle demonstration.
 
 ## Result
 
-Discount behavior is now interchangeable, and new discount classes can be added without modifying checkout logic. Cart actions can also be executed and undone through command objects.
+Discount behavior is now interchangeable, and new discount classes can be added without modifying checkout logic. Cart actions can also be executed and undone through command objects, including exact restoration of a previous cart item after an add command is undone.
