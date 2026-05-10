@@ -81,50 +81,22 @@ class ShoppingCart:
             total += item.line_total
         return money(total)
 
+    def item_count(self) -> int:
+        return sum(item.quantity for item in self.items.values())
+
+    def clear(self) -> None:
+        self.items.clear()
+
     def checkout(
         self,
         discount_code: str | None,
         payment_method: str,
         customer_email: str,
     ) -> CheckoutResult:
-        subtotal = self.subtotal()
-        item_count = sum(item.quantity for item in self.items.values())
+        from .checkout import CheckoutFacade
 
-        if discount_code is None or discount_code == "":
-            discount = Decimal("0.00")
-        elif discount_code == "WELCOME10":
-            discount = subtotal * Decimal("0.10")
-        elif discount_code == "VIP20":
-            discount = subtotal * Decimal("0.20")
-        elif discount_code == "BULK15":
-            if subtotal >= Decimal("100.00"):
-                discount = subtotal * Decimal("0.15")
-            else:
-                discount = Decimal("0.00")
-        else:
-            raise ValueError(f"Unknown discount code: {discount_code}")
-
-        discount = money(discount)
-        total = money(subtotal - discount)
-
-        if payment_method == "credit_card":
-            payment_status = "approved"
-            payment_reference = f"cc-{customer_email}-{total}"
-        elif payment_method == "paypal":
-            payment_status = "approved"
-            payment_reference = f"paypal-{customer_email}-{total}"
-        elif payment_method == "bank_transfer":
-            payment_status = "pending"
-            payment_reference = f"bank-{customer_email}-{total}"
-        else:
-            raise ValueError(f"Unknown payment method: {payment_method}")
-
-        self.items.clear()
-        return CheckoutResult(
-            subtotal=subtotal,
-            discount=discount,
-            total=total,
-            payment_status=payment_status,
-            payment_reference=payment_reference,
-            item_count=item_count,
+        return CheckoutFacade(self).checkout(
+            discount_code=discount_code,
+            payment_method=payment_method,
+            customer_email=customer_email,
         )
