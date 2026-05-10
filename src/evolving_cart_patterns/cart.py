@@ -1,19 +1,9 @@
 from dataclasses import dataclass
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal
 
-
-def money(value: Decimal | int | str) -> Decimal:
-    return Decimal(str(value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-
-@dataclass(frozen=True)
-class Product:
-    sku: str
-    name: str
-    price: Decimal
-    product_type: str
-    shipping_required: bool
-    tax_rate: Decimal
+from .factories import ProductFactory
+from .money import money
+from .products import Product
 
 
 @dataclass(frozen=True)
@@ -37,40 +27,14 @@ class CheckoutResult:
 
 
 class ShoppingCart:
-    def __init__(self) -> None:
+    def __init__(self, product_factory: ProductFactory | None = None) -> None:
         self.items: dict[str, CartItem] = {}
+        self.product_factory = product_factory or ProductFactory()
 
     def create_product(
         self, sku: str, name: str, price: Decimal | int | str, product_type: str
     ) -> Product:
-        if product_type == "physical":
-            return Product(
-                sku=sku,
-                name=name,
-                price=money(price),
-                product_type="physical",
-                shipping_required=True,
-                tax_rate=Decimal("0.18"),
-            )
-        if product_type == "digital":
-            return Product(
-                sku=sku,
-                name=name,
-                price=money(price),
-                product_type="digital",
-                shipping_required=False,
-                tax_rate=Decimal("0.08"),
-            )
-        if product_type == "subscription":
-            return Product(
-                sku=sku,
-                name=name,
-                price=money(price),
-                product_type="subscription",
-                shipping_required=False,
-                tax_rate=Decimal("0.00"),
-            )
-        raise ValueError(f"Unknown product type: {product_type}")
+        return self.product_factory.create_product(sku, name, price, product_type)
 
     def add_product(
         self,
