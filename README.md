@@ -46,6 +46,7 @@ classDiagram
     ProductCreator <|.. PhysicalProductCreator
     ProductCreator <|.. DigitalProductCreator
     ProductCreator <|.. SubscriptionProductCreator
+    ProductCreator --> Product
     CheckoutFacade --> ShoppingCart
     CheckoutFacade --> DiscountStrategy
     CheckoutFacade --> PaymentAdapter
@@ -57,6 +58,8 @@ classDiagram
     CartCommand <|.. AddItemCommand
     CartCommand <|.. RemoveItemCommand
     CartCommandHistory --> CartCommand
+    AddItemCommand --> ShoppingCart
+    RemoveItemCommand --> ShoppingCart
 ```
 
 ## Run
@@ -68,7 +71,7 @@ python3 -m pytest
 
 ## Repository Workflow
 
-- `main`: Phase 0 baseline and final merged result.
+- `main`: final merged result; Phase 0 remains visible as the first commit.
 - `phase-1`: Creational pattern work.
 - `phase-2`: Structural pattern work.
 - `phase-3`: Behavioral pattern work and CI.

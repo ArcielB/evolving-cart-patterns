@@ -60,7 +60,7 @@ No design pattern has been applied yet. The baseline intentionally keeps product
 
 **Problem solved:** Cart actions were direct mutations, so there was no object representing an operation. That made undo or action history difficult.
 
-**Implementation:** `AddItemCommand` and `RemoveItemCommand` implement `execute()` and `undo()`. `CartCommandHistory` executes commands and can undo the most recent one.
+**Implementation:** `AddItemCommand` and `RemoveItemCommand` implement `execute()` and `undo()`. `CartCommandHistory` executes commands and can undo the most recent one. `AddItemCommand` stores the previous cart item before execution so undo restores the exact previous state when the same SKU already existed.
 
 **Benefit:** Cart actions can be logged, queued, tested, and undone without adding those responsibilities to `ShoppingCart`.
 
