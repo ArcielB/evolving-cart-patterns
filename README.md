@@ -42,6 +42,7 @@ python3 -m pytest
 
 - Phase 0 before refactoring: `docs/diagrams/phase0-before.mmd`
 - Phase 1 after Simple Factory: `docs/diagrams/phase1-after.mmd`
+- Phase 2 structural architecture: `docs/diagrams/phase2-architecture.mmd`
 
 ```mermaid
 classDiagram
@@ -49,4 +50,7 @@ classDiagram
     ProductFactory --> Product
     ShoppingCart --> CartItem
     CartItem --> Product
+    CheckoutFacade --> ShoppingCart
+    CheckoutFacade --> PaymentAdapter
+    PaymentAdapter --> ExternalPaymentProvider
 ```
